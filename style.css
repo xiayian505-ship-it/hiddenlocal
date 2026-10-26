@@ -1,0 +1,245 @@
+:root {
+  color-scheme: light;
+  --page-background: #f7f7f3;
+  --ink-color: #283432;
+  --quiet-color: #75827e;
+  --line-color: #bfc9c3;
+  --map-fill: #dfe7e1;
+  --map-hover-fill: #c4d8cb;
+  --map-active-fill: #83b3a0;
+  --map-border: #6f897e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 280px;
+}
+
+body {
+  margin: 0;
+  background: var(--page-background);
+  color: var(--ink-color);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+.site-layout {
+  width: min(100%, 1520px);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 30px clamp(18px, 5vw, 84px) 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  position: relative;
+  padding: 0 0 24px;
+  border-bottom: 1px solid var(--line-color);
+}
+
+.site-header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 70%;
+  height: 1px;
+  background: var(--ink-color);
+}
+
+.site-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: clamp(14px, 3vw, 32px);
+  row-gap: 6px;
+  margin: 0;
+  font-weight: 400;
+}
+
+.site-title-chinese {
+  font-size: clamp(31px, 3.7vw, 50px);
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+}
+
+.site-title-english {
+  font-size: clamp(16px, 1.65vw, 24px);
+  letter-spacing: 0.075em;
+  font-weight: 300;
+}
+
+.site-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0 22px;
+}
+
+.map-container svg {
+  display: block;
+  width: auto;
+  height: clamp(660px, 88svh, 1340px);
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* 每個縣市可以獨立浮起，不影響鄰近縣市的形狀。 */
+.map-container .county {
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 280ms ease,
+    filter 280ms ease;
+}
+
+.map-container .county path {
+  fill: var(--map-fill);
+  stroke: var(--map-border);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill 280ms ease,
+    stroke 280ms ease,
+    stroke-width 280ms ease;
+}
+
+.map-container .county:hover:not(.is-active) {
+  transform: translateY(-5px);
+  filter: drop-shadow(0 5px 4px rgb(31 57 46 / 13%));
+}
+
+.map-container .county:hover:not(.is-active) path {
+  fill: var(--map-hover-fill);
+}
+
+.map-container .county.is-active {
+  transform: translateY(-16px) scale(1.04);
+  filter: drop-shadow(0 15px 12px rgb(26 55 41 / 28%));
+}
+
+.map-container .county.is-active path {
+  fill: var(--map-active-fill);
+  stroke: #345b4a;
+  stroke-width: 2;
+}
+
+/* 僅在縣市被選中、浮起時顯示名稱；文字與縣市一起移動。 */
+.map-container .county .county-label {
+  fill: var(--ink-color);
+  stroke: var(--page-background);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-family: inherit;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.map-container .county:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 5px rgb(34 84 57 / 30%));
+}
+
+.map-container .county:focus-visible path {
+  stroke: #244e3d;
+  stroke-width: 3;
+}
+
+.site-footer {
+  position: relative;
+  padding: 23px 0 9px;
+  border-top: 1px solid var(--line-color);
+  text-align: center;
+}
+
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: 0;
+  width: 70%;
+  height: 1px;
+  background: var(--ink-color);
+}
+
+.footer-logo {
+  font-size: clamp(12px, 1.15vw, 15px);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.footer-separator {
+  margin: 0 0.35em;
+  color: var(--quiet-color);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .site-layout {
+    padding-top: 23px;
+    padding-bottom: 15px;
+  }
+
+  .site-header {
+    padding-bottom: 17px;
+  }
+
+  .map-container {
+    padding: 19px 0 26px;
+  }
+
+  .map-container svg {
+    width: calc(100% + 64px);
+    height: auto;
+    max-width: none;
+    max-height: none;
+    flex-shrink: 0;
+  }
+
+  .site-footer {
+    padding-top: 20px;
+  }
+
+  .map-container .county .county-label {
+    font-size: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-container .county,
+  .map-container .county path {
+    transition: none;
+  }
+}
